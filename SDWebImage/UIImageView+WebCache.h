@@ -45,6 +45,8 @@
  */
 @interface UIImageView (WebCache)
 
+- (NSURL *)imageURL;
+
 /**
  * Set the imageView `image` with an `url`.
  *

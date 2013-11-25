@@ -9,6 +9,7 @@
 #import "UIImageView+WebCache.h"
 #import "objc/runtime.h"
 
+static char imageURLKey;
 static char operationKey;
 static char operationArrayKey;
 
@@ -48,6 +49,7 @@ static char operationArrayKey;
 {
     [self cancelCurrentImageLoad];
 
+    objc_setAssociatedObject(self, &imageURLKey, url, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     self.image = placeholder;
     
     if (url)
@@ -72,6 +74,11 @@ static char operationArrayKey;
         }];
         objc_setAssociatedObject(self, &operationKey, operation, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
+}
+
+- (NSURL *)imageURL;
+{
+    return objc_getAssociatedObject(self, &imageURLKey);
 }
 
 - (void)setAnimationImagesWithURLs:(NSArray *)arrayOfURLs
