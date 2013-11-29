@@ -9,9 +9,15 @@
 #import "MKAnnotationView+WebCache.h"
 #import "objc/runtime.h"
 
+static char imageURLKey;
 static char operationKey;
 
 @implementation MKAnnotationView (WebCache)
+
+- (NSURL *)imageURL;
+{
+    return objc_getAssociatedObject(self, &imageURLKey);
+}
 
 - (void)setImageWithURL:(NSURL *)url
 {
@@ -42,6 +48,7 @@ static char operationKey;
 {
     [self cancelCurrentImageLoad];
 
+    objc_setAssociatedObject(self, &imageURLKey, url, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     self.image = placeholder;
     
     if (url)
